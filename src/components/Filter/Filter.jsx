@@ -1,23 +1,33 @@
-import PropTypes from 'prop-types';
 import s from './Filter.module.css';
+import { connect } from 'react-redux';
+import { changeFilter } from '../../redux/actions';
 
-const Filter = ({ filterWord, filterHandler }) => {
+const Filter = ({ value, filterHandler }) => {
   return (
     <div>
       Find contacts by name
       <input
         className={s.filterInput}
         type="text"
-        value={filterWord}
+        value={value}
         onChange={filterHandler}
       ></input>
     </div>
   );
 };
 
-Filter.propTypes = {
-  filterWord: PropTypes.string.isRequired,
-  filterHandler: PropTypes.func.isRequired,
+const mapStateToProps = state => {
+  return {
+    //state props for Filter:
+    value: state.contacts.filter,
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    //action props for Filter:
+    filterHandler: event => dispatch(changeFilter(event.target.value)),
+  };
 };
 
-export default Filter;
+//export default Filter;
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);

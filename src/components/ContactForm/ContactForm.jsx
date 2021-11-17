@@ -3,8 +3,10 @@ import '../../App';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import s from './ContactForm.module.css';
+import { connect } from 'react-redux';
+import { addItem } from '../../redux/actions';
 
-const ContactForm = ({ newContactHandler }) => {
+const ContactForm = ({ items, addNewContact }) => {
   const labelNameId = uuidv4();
   const labelNumberId = uuidv4();
 
@@ -47,12 +49,21 @@ const ContactForm = ({ newContactHandler }) => {
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    newContactHandler({
-      id: uuidv4(),
-      name: name,
-      number: number,
-    });
+    console.log('handleSubmit', name, number);
+    isNewContactValid({ id: uuidv4() });
     reset();
+  };
+
+  const isNewContactValid = ({ id }) => {
+    const matchedContactsList = items.filter(item => {
+      return item.name.toLowerCase() === name.toLowerCase();
+    });
+    if (matchedContactsList.length !== 0) {
+      alert(`${name} is already in contacts.`);
+    } else {
+      console.log('addNewContact', id, name, number);
+      addNewContact({ id, name, number });
+    }
   };
 
   const reset = () => {
@@ -91,7 +102,20 @@ const ContactForm = ({ newContactHandler }) => {
 };
 
 ContactForm.propTypes = {
-  newContactHandler: PropTypes.func.isRequired,
+  items: PropTypes.array.isRequired,
+  addNewContact: PropTypes.func.isRequired,
 };
 
-export default ContactForm;
+const mapStateToProps = state => {
+  return {
+    items: state.contacts.items,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addNewContact: newContact => dispatch(addItem(newContact)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
