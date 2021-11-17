@@ -49,7 +49,6 @@ const ContactForm = ({ items, addNewContact }) => {
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    console.log('handleSubmit', name, number);
     isNewContactValid({ id: uuidv4() });
     reset();
   };
@@ -61,7 +60,6 @@ const ContactForm = ({ items, addNewContact }) => {
     if (matchedContactsList.length !== 0) {
       alert(`${name} is already in contacts.`);
     } else {
-      console.log('addNewContact', id, name, number);
       addNewContact({ id, name, number });
     }
   };

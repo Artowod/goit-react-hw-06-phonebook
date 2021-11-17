@@ -28,7 +28,6 @@ const filteredContactList = function (contacts, filterWord) {
   result = contacts.filter(item => {
     return item.name.toLowerCase().includes(filterWord.toLowerCase());
   });
-  console.log(contacts, filterWord, result);
   return result;
 };
 
